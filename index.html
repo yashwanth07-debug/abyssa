@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABYSSA · a descent to 10,935 metres</title>
+  <meta name="description" content="An immersive 3D descent portfolio: pilot the submersible DSV NEREIS from sunlit shallows to Challenger Deep. Five real ocean zones — About, Skills, Work, Journey, Contact — built with Three.js, custom GLSL and procedural WebAudio." />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <!-- ─── PRELOADER ─────────────────────────────────────────── -->
+  <div id="preloader">
+    <div class="pre-core">
+      <div class="sweep"><i></i></div>
+      <div class="pre-word">ABYSSA</div>
+      <div class="pre-sub">SUBMERSIBLE CHECKLIST RUNNING</div>
+      <div class="pre-count"><span id="prenum">000</span></div>
+      <div class="pre-bar"><i id="prebar"></i></div>
+    </div>
+  </div>
+
+  <!-- ─── IGNITION ──────────────────────────────────────────── -->
+  <div id="ignition" class="hidden">
+    <div class="ig-card">
+      <div class="ig-eyebrow">PNP OCEANOGRAPHIC · DIVE PERMIT NO. 07</div>
+      <h1>BOARD THE <em>NEREIS</em></h1>
+      <p class="ig-adv">FOR THE BEST EXPERIENCE —<br><b>SOUND ON</b> · <b>DESKTOP</b> · <b>SLOW SCROLL</b></p>
+      <button id="begin">INITIATE DIVE</button>
+      <div class="ig-foot">10,935 M TO THE FLOOR · 5 ZONES · 1 SIGNAL</div>
+    </div>
+  </div>
+
+  <!-- ─── HUD ───────────────────────────────────────────────── -->
+  <div id="hud" class="hidden">
+    <div class="hud-corner tl"></div><div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div><div class="hud-corner br"></div>
+
+    <header id="brand">
+      <span class="brand-name">A B Y S S A</span>
+      <span class="brand-sub">DSV NEREIS · DIVE 07</span>
+    </header>
+
+    <button id="audioBtn" title="toggle sonar &amp; ambience"><i></i>SONAR&nbsp;ON</button>
+
+    <nav id="rail"></nav>
+
+    <div id="depthBox">
+      <div class="d-row"><span id="kZone">SUNLIGHT ZONE</span><span id="kPsi">14.5 PSI</span></div>
+      <div id="kDepth">0<small>m</small></div>
+      <div class="d-row sub"><span id="kRate">0 cm/s</span><span>HULL OK</span></div>
+    </div>
+
+    <div id="toast"></div>
+
+    <footer id="strip"></footer>
+  </div>
+
+  <!-- ─── PANEL: HERO ───────────────────────────────────────── -->
+  <section id="panel-hero" class="panel hidden">
+    <h1 id="heroTitle">ABYSSA</h1>
+    <p id="heroSub"></p>
+    <div id="heroStats"></div>
+    <div class="hero-prompt"><span class="mouse"></span><b id="heroPrompt"></b></div>
+  </section>
+
+  <!-- ─── PANEL: ZONE (templated on dock) ───────────────────── -->
+  <section id="panel-zone" class="panel hidden">
+    <div class="z-eyebrow"><span id="zRange"></span><em id="zLatin"></em></div>
+    <div class="z-name" id="zName"></div>
+    <h2 class="z-title" id="zTitle"></h2>
+    <p class="z-body" id="zBody"></p>
+    <div class="z-extra" id="zExtra"></div>
+    <div class="z-facts">
+      <div class="zf-h" id="zFactTitle"></div>
+      <ul id="zFacts"></ul>
+    </div>
+  </section>
+
+  <!-- ─── PANEL: OUTRO ──────────────────────────────────────── -->
+  <section id="panel-outro" class="panel hidden">
+    <div class="o-eyebrow">DIVE COMPLETE · HULL INTACT</div>
+    <h2 id="outroTitle"></h2>
+    <p id="outroSub"></p>
+    <button id="freelook">◈ FREE LOOK</button>
+    <div class="o-note" id="outroNote"></div>
+    <div class="o-links" id="outroLinks"></div>
+  </section>
+
+  <!-- ─── SONAR RING (DOM FX on dock) ───────────────────────── -->
+  <div id="sonarFx"></div>
+
+  <canvas id="sea"></canvas>
+  <div id="scan"></div>
+  <div id="grain"></div>
+  <div id="veil"></div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
