@@ -159,7 +159,7 @@ function pointsMaterial({ color, size, opacity, glow = 0 }) {
         float dist = -mv.z;
         vA = smoothstep(320.0, 60.0, dist);
         vGlow = uGlow * smoothstep(60.0, 8.0, distance(p, uSub)); // flare near sub
-        gl_PointSize = uSize * (1.0 + vGlow * 1.6) * uPix * (140.0 / dist);
+        gl_PointSize = max(uSize * (1.0 + vGlow * 1.6) * uPix * (140.0 / dist), 2.3 * uPix);
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: /* glsl */ `

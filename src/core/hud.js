@@ -34,11 +34,17 @@ export class HUD {
       .map(([k, , href]) => `<a href="${href}" target="_blank" rel="noopener">${k} ↗</a>`).join('');
     $('strip').innerHTML = PILOT.awards.map((a, i) => `<span>${i === 0 ? '<b>' + a + '</b>' : a}</span>`).join('');
 
-    $('begin').addEventListener('click', () => {
+    let begun = false;
+    const dive = () => {
+      if (begun) return; begun = true;
       $('ignition').classList.add('hidden');
+      $('ignition').dataset.lock = '1';
       $('hud').classList.remove('hidden');
-      onBegin();
-    });
+      try { onBegin(); } catch (err) { console.error('[ABYSS] begin failed:', err); started = true; }
+    };
+    $('begin').addEventListener('click', dive);
+    // some browsers delay click on touch — strike on press too
+    $('begin').addEventListener('pointerdown', dive);
     $('audioBtn').addEventListener('click', () => {
       const on = onAudio();
       $('audioBtn').classList.toggle('off', !on);
@@ -94,7 +100,8 @@ export class HUD {
     $('kDepth').innerHTML = `${Math.round(depthM).toLocaleString('en-US')}<small>m</small>`;
     const psi = (1 + depthM / 10.06) * 14.69;
     this._txt('kPsi', `${Math.round(psi).toLocaleString('en-US')} PSI`);
-    this._txt('kRate', `${Math.abs(rate).toFixed(0)} cm/s`);
+    const r = Math.min(260, Math.max(0, Math.abs(isFinite(rate) ? rate : 0)));
+    this._txt('kRate', `${r.toFixed(0)} cm/s`);
     // zone label
     let zn = 'SURFACE';
     if (depthM >= 20 && depthM < 200) zn = 'SUNLIGHT ZONE';

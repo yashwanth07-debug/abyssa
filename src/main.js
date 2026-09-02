@@ -59,10 +59,15 @@ let freelook = false;
 
 const hud = new HUD({
   onBegin() {
-    audio.start();
-    audio.setDepth(0);
+    // HUD + journey engage FIRST — audio must never be a single point of failure
     started = true;
     hud.liftVeil();
+    try {
+      audio.start();
+      audio.setDepth(0);
+    } catch (err) {
+      console.warn('[ABYSS] audio unavailable — diving silent:', err && err.message);
+    }
   },
   onAudio() { return audio.toggle(); },
   onRail(i) {
@@ -110,7 +115,10 @@ async function build() {
 
 // ── scroll physics ────────────────────────────────────────────────────
 let pTarget = 0, pSmooth = 0, pPrev = 0;
-const maxScroll = () => document.documentElement.scrollHeight - innerHeight;
+let baseVH = innerHeight;
+const trackVH = () => { baseVH = Math.max(baseVH, innerHeight, (window.visualViewport && visualViewport.height) || 0); };
+trackVH();
+const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - baseVH);
 addEventListener('scroll', () => { pTarget = maxScroll() > 0 ? Math.min(1, Math.max(0, scrollY / maxScroll())) : 0; }, { passive: true });
 function smoothScrollTo(p) {
   const max = maxScroll();
@@ -288,7 +296,7 @@ function applySize() {
   lifeApi && lifeApi.setPixelRatio(pixelRatio);
   subApi && subApi.setPixelRatio(pixelRatio);
 }
-addEventListener('resize', applySize);
+addEventListener('resize', () => { applySize(); trackVH(); });
 
 // ── debug / rig interface ─────────────────────────────────────────────
 window.__ABYSS = {

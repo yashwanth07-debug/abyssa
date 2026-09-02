@@ -22,9 +22,9 @@ canvas#sea { position: fixed; inset: 0; width: 100%; height: 100%; display: bloc
 button { font-family: var(--mono); cursor: pointer; }
 
 /* scanlines + grain + entry veil */
-#scan { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .5;
+#scan { position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .3;
   background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(0, 8, 12, .16) 3px 4px); }
-#grain { position: fixed; inset: -60px; pointer-events: none; z-index: 41; opacity: .07; mix-blend-mode: overlay; }
+#grain { position: fixed; inset: -60px; pointer-events: none; z-index: 41; opacity: .05; mix-blend-mode: overlay; }
 #veil { position: fixed; inset: 0; z-index: 60; pointer-events: none; background: #03141f;
   transition: opacity 1.6s ease .1s; }
 #veil.up { opacity: 0; }
