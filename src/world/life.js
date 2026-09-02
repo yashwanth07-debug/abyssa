@@ -629,9 +629,9 @@ export function buildLife(scene) {
       wu.mat.uniforms.uT.value = t;
       // the colossus keeps to the far side — a slow silhouette on the horizon
       whale.position.set(
-        -260 + Math.sin(t * 0.05) * 18,
-        yOf(520) - 34 + Math.sin(t * 0.11) * 8,
-        -200 + Math.sin(t * 0.02) * 60,
+        -140 + Math.sin(t * 0.05) * 14,
+        yOf(520) - 26 + Math.sin(t * 0.11) * 7,
+        -110 + Math.sin(t * 0.02) * 44,
       );
       whale.rotation.y = Math.PI * 0.52 + Math.sin(t * 0.05) * 0.1;
       whale.rotation.z = Math.sin(t * 0.4) * 0.02;
