@@ -15,8 +15,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="/abyssa/assets/index-C2qzX9EG.js"></script>
-  <link rel="stylesheet" crossorigin href="/abyssa/assets/index-DFVJd4XD.css">
+  <script type="module" crossorigin src="/abyssa/assets/index-BvTiQtoO.js"></script>
+  <link rel="stylesheet" crossorigin href="/abyssa/assets/index-Cj2Oeslv.css">
 </head>
 <body>
   <!-- ─── PRELOADER ─────────────────────────────────────────── -->
@@ -99,6 +99,17 @@
 
   <!-- ─── SONAR RING (DOM FX on dock) ───────────────────────── -->
   <div id="sonarFx"></div>
+
+  <!-- ─── THROTTLE STICK: hold forward to dive ─────────────── -->
+  <div id="joy" aria-label="Submersible throttle — hold forward to dive">
+    <div id="joyUp" class="joy-btn">&#9650;<span>DIVE</span></div>
+    <div id="joyPad">
+      <div class="joy-ridges"></div>
+      <div id="joyKnob"></div>
+    </div>
+    <div id="joyDown" class="joy-btn">&#9660;<span>RISE</span></div>
+    <div id="joyHint">HOLD FORWARD TO DRIVE THE NEREIS</div>
+  </div>
 
   <canvas id="sea"></canvas>
   <div id="scan"></div>
