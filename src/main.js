@@ -7,7 +7,7 @@ import { buildLife } from './world/life.js';
 import { buildSub } from './world/sub.js';
 import { buildPost } from './core/post.js';
 import { AbyssAudio } from './core/audio.js';
-import { HUD } from './core/hud.js';
+import { HUD, buildJoystick } from './core/hud.js';
 
 const canvas = document.getElementById('sea');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
@@ -80,6 +80,21 @@ const hud = new HUD({
   },
 });
 
+// ── throttle stick: hold-forward drive, independent of scroll ────────
+let throttleV = 0;      // -1 rise .. +1 dive
+let throttleP = null;   // held position target while joystick is active
+const joystickBegin = () => {
+  if (started) return;
+  // driving the stick counts as boarding the sub
+  const ig = document.getElementById('ignition');
+  ig.classList.add('hidden'); ig.dataset.lock = '1';
+  document.getElementById('hud').classList.remove('hidden');
+  started = true;
+  hud.liftVeil();
+  try { audio.start(); audio.setDepth(0); } catch (e) { console.warn('[ABYSS] silent dive:', e && e.message); }
+};
+const joyHandle = buildJoystick((v) => { throttleV = v; }, joystickBegin);
+
 let oceanApi;
 async function build() {
   const steps = [
@@ -151,6 +166,17 @@ function loop() {
   const dt = dtRaw * timeScale;
   tSim += dt;
   const t = tSim;
+
+  // throttle stick drive — direct progress control, independent of document scroll
+  if (throttleV !== 0) {
+    throttleP = throttleP === null ? pTarget : throttleP;
+    throttleP = THREE.MathUtils.clamp(throttleP + throttleV * dt * 0.05, 0, 1);
+    pTarget = throttleP;
+  } else if (throttleP !== null) {
+    // released: sync the native scroll position to where the stick parked us
+    throttleP = null;
+    scrollTo(0, pTarget * maxScroll());
+  }
 
   // scroll smoothing — momentum descent
   pSmooth += (pTarget - pSmooth) * (1 - Math.pow(0.0001, dt));

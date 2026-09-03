@@ -170,3 +170,72 @@ export class HUD {
 }
 
 export { MAX_DEPTH };
+
+
+// ─── THROTTLE STICK: drag pad or hold buttons; cb receives -1..+1 ────
+// +1 = DIVE (stick forward), -1 = RISE, 0 = released.
+export function buildJoystick(cb, onFirstEngage) {
+  const pad = $('joyPad'), knob = $('joyKnob');
+  const btnUp = $('joyUp'), btnDown = $('joyDown');
+  if (!pad || !knob) return;
+  let engaged = false;
+  const R = 40;
+  let cur = 0;
+  const engage = () => { if (!engaged) { engaged = true; try { onFirstEngage && onFirstEngage(); } catch {} } };
+  const moveKnob = (dy) => {
+    knob.style.transform = `translate(-50%, calc(-50% + ${dy}px))`;
+    knob.classList.toggle('live', Math.abs(cur) > 0.05);
+  };
+  const setV = (v) => {
+    v = Math.max(-1, Math.min(1, v));
+    if (Math.abs(v) < 0.07) v = 0;
+    cur = v;
+    cb(v);
+  };
+  let pid = null;
+  pad.addEventListener('pointerdown', (e) => {
+    pid = e.pointerId; pad.setPointerCapture(pid); engage();
+    const r = pad.getBoundingClientRect();
+    const dy = Math.max(-R, Math.min(R, e.clientY - (r.top + r.height / 2)));
+    setV(-dy / R); moveKnob(dy);
+  });
+  pad.addEventListener('pointermove', (e) => {
+    if (pid === null || e.pointerId !== pid) return;
+    const r = pad.getBoundingClientRect();
+    const dy = Math.max(-R, Math.min(R, e.clientY - (r.top + r.height / 2)));
+    setV(-dy / R); moveKnob(dy);
+  });
+  const release = (e) => {
+    if (pid === null || (e && e.pointerId !== pid)) return;
+    pid = null; setV(0); moveKnob(0);
+  };
+  pad.addEventListener('pointerup', release);
+  pad.addEventListener('pointercancel', release);
+  const hold = (btn, v) => {
+    const down = (e) => { e.preventDefault(); engage(); btn.classList.add('live'); setV(v); moveKnob(v * R); };
+    const up = () => { btn.classList.remove('live'); setV(0); moveKnob(0); };
+    btn.addEventListener('pointerdown', down);
+    btn.addEventListener('pointerup', up);
+    btn.addEventListener('pointercancel', up);
+    btn.addEventListener('pointerleave', up);
+  };
+  hold(btnUp, 1);    // DIVE
+  hold(btnDown, -1); // RISE
+  // keyboard: W / ArrowUp = dive, S / ArrowDown = rise
+  const keyMap = { KeyW: 1, ArrowUp: 1, KeyS: -1, ArrowDown: -1 };
+  let stack = [];
+  addEventListener('keydown', (e) => {
+    const v = keyMap[e.code]; if (v === undefined || e.repeat && !stack.length) return;
+    e.preventDefault(); engage();
+    if (!stack.includes(v)) stack.push(v);
+    const nv = stack[stack.length - 1];
+    setV(nv); moveKnob(nv * R);
+  });
+  addEventListener('keyup', (e) => {
+    const v = keyMap[e.code]; if (v === undefined) return;
+    stack = stack.filter(k => k !== v);
+    const nv = stack.length ? stack[stack.length - 1] : 0;
+    setV(nv); moveKnob(nv * R);
+  });
+  return { value: () => cur };
+}

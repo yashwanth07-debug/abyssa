@@ -248,3 +248,38 @@ body.freelook #rail, body.freelook #depthBox, body.freelook .hud-corner { opacit
   #kDepth { font-size: 30px; }
   #heroStats { gap: 22px; flex-wrap: wrap; }
 }
+
+/* ─── THROTTLE STICK ─────────────────────────────────────────── */
+#joy { position: fixed; right: 22px; bottom: 96px; z-index: 95; display: flex;
+  flex-direction: column; align-items: center; gap: 9px; user-select: none;
+  -webkit-user-select: none; touch-action: none; }
+#joyPad { position: relative; width: 118px; height: 118px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, rgba(20,58,80,.55), rgba(4,18,30,.85));
+  border: 1px solid rgba(111,216,255,.35);
+  box-shadow: 0 0 0 1px rgba(3,16,26,.6), 0 8px 30px rgba(0,4,8,.5), inset 0 0 24px rgba(111,216,255,.08);
+  touch-action: none; }
+.joy-ridges { position: absolute; inset: 12px; border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 62%, rgba(111,216,255,.10) 63%, transparent 64%),
+    conic-gradient(rgba(111,216,255,.12) 0 12deg, transparent 12deg 90deg, rgba(111,216,255,.12) 90deg 102deg, transparent 102deg 180deg, rgba(111,216,255,.12) 180deg 192deg, transparent 192deg 270deg, rgba(111,216,255,.12) 270deg 282deg, transparent 282deg); }
+#joyKnob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(circle at 40% 32%, rgba(150,235,255,.9), rgba(46,110,140,.95) 55%, rgba(10,40,60,.98));
+  border: 1px solid rgba(200,240,255,.5);
+  box-shadow: 0 4px 16px rgba(0,8,16,.6), inset 0 -6px 12px rgba(0,10,20,.35), 0 0 18px rgba(111,216,255,.25);
+  transition: box-shadow .2s; cursor: grab; }
+#joyKnob.live { box-shadow: 0 4px 20px rgba(0,8,16,.6), 0 0 34px rgba(111,216,255,.55);
+  background: radial-gradient(circle at 40% 32%, rgba(190,245,255,1), rgba(70,150,190,.95) 55%, rgba(14,52,75,.98)); }
+.joy-btn { display: flex; align-items: center; gap: 8px; padding: 7px 14px;
+  font: 600 10px/1 "IBM Plex Mono", monospace; letter-spacing: .22em; color: #9fe8ff;
+  background: linear-gradient(180deg, rgba(18,55,78,.75), rgba(6,22,34,.9));
+  border: 1px solid rgba(111,216,255,.35); border-radius: 6px; cursor: pointer;
+  touch-action: none; text-align: center; }
+.joy-btn span { color: #d8f6ff; }
+.joy-btn.live { background: linear-gradient(180deg, rgba(60,150,200,.8), rgba(20,70,100,.9));
+  box-shadow: 0 0 16px rgba(111,216,255,.4); }
+#joyHint { font: 500 8.5px/1.5 "IBM Plex Mono", monospace; letter-spacing: .2em;
+  color: rgba(159,232,255,.55); text-align: center; max-width: 150px; }
+@media (max-width: 760px) {
+  #joy { right: 12px; bottom: 64px; transform: scale(.9); transform-origin: bottom right; }
+}
