@@ -17,7 +17,8 @@ body {
   /* the scroll runway — the descent itself */
   min-height: 1500vh;
 }
-canvas#sea { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+canvas#sea { position: fixed; inset: 0; width: 100%; height: 100%; display: block; visibility: hidden; }
+canvas#sea.live { visibility: visible; }
 .hidden { opacity: 0 !important; pointer-events: none !important; }
 button { font-family: var(--mono); cursor: pointer; }
 

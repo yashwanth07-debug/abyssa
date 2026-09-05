@@ -160,6 +160,7 @@ let fpsAcc = 0, fpsN = 0, fpsTimer = 0;
 
 const clock = new THREE.Clock();
 let timeScale = 1; let tSim = 0;
+let framesPainted = 0;
 function loop() {
   requestAnimationFrame(loop);
   const dtRaw = Math.min(clock.getDelta(), 0.066);
@@ -297,6 +298,13 @@ function loop() {
   }
 
   post.composer.render();
+  if (framesPainted < 3) {
+    framesPainted++;
+    if (framesPainted === 3) {
+      canvas.classList.add('live');
+      document.getElementById('veil').classList.add('up');
+    }
+  }
 
   // adaptive resolution — hold 45+ fps
   fpsAcc += dt; fpsN++; fpsTimer += dt;
@@ -322,7 +330,19 @@ function applySize() {
   lifeApi && lifeApi.setPixelRatio(pixelRatio);
   subApi && subApi.setPixelRatio(pixelRatio);
 }
-addEventListener('resize', () => { applySize(); trackVH(); });
+let resizeTick = 0;
+addEventListener('resize', () => {
+  if (resizeTick) return;
+  resizeTick = requestAnimationFrame(() => {
+    resizeTick = 0;
+    const w = innerWidth, h = innerHeight;
+    const s = renderer.getSize(new THREE.Vector2());
+    if (Math.abs(s.x - w) < 1 && Math.abs(s.y - h) < 1) { trackVH(); return; }
+    applySize();
+    if (window.__ABYSS && window.__ABYSS.ready) post.composer.render();
+    trackVH();
+  });
+});
 
 // ── debug / rig interface ─────────────────────────────────────────────
 window.__ABYSS = {
