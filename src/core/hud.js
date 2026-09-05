@@ -65,6 +65,9 @@ export class HUD {
     if (done) {
       setTimeout(() => {
         $('preloader').classList.add('hidden');
+        // lift the entry veil WITH the preloader — no black gap at page open;
+        // the sunlit ocean is already alive behind the ignition card.
+        $('veil').classList.add('up');
         if (!document.getElementById('ignition').dataset.lock) $('ignition').classList.remove('hidden');
       }, 420);
     }
